@@ -1,55 +1,58 @@
 
-# Sign Language Interpreter using Deep Learning
-> A sign language interpreter using live video feed from the camera. 
-The project was completed in 24 hours as part of HackUNT-19, the University of North Texas's annual Hackathon. You can view the project demo on [YouTube](https://link.harshgupta.com/acd72). 
+Sign Language Interpreter using Deep Learning
+Real-time American Sign Language (ASL) interpreter using live webcam feed.
 
-## Table of contents
-* [General info](#general-info)
-* [Screenshots](#screenshots)
-* [Demo](#demo)
-* [Technologies and Tools](#technologies-and-tools)
-* [Setup](#setup)
-* [Process](#process)
-* [Code Examples](#code-examples)
-* [Features](#features)
-* [Status](#status)
-* [Contact](#contact)
+Overview
+Developed as part of HACK UNT 19, the aim of this project is to enhance accessibility by empowering individuals with hearing disabilities. With over 70 million deaf people globally, we sought to build a personal sign language interpreter that operates continuously—allowing users to communicate independently without needing a human translator.
 
-## General info
+Technologies Used
+Python
 
-The theme at HACK UNT 19 was to use technology to improve accessibility by finding a creative solution to benefit the lives of those with a disability. 
-We wanted to make it easy for 70 million deaf people across the world to be independent of translators for there daily communication needs, so we designed the app to work as a personal translator 24*7 for the deaf people.
+TensorFlow
 
+Keras
 
-## Technologies and Tools
-* Python 
-* TensorFlow
-* Keras
-* OpenCV
+OpenCV
 
-## Setup
+Setup Instructions
+Clone the repository and navigate to the project directory.
 
-* Use comand promt to setup environment by using install_packages.txt and install_packages_gpu.txt files. 
- 
-`pyton -m pip r install_packages.txt`
+Open a command prompt and install the required packages using one of the provided text files:
 
-This will help you in installing all the libraries required for the project.
+bash
+Copy
+Edit
+python -m pip install -r install_packages.txt
+or for GPU support:
 
-## Process
+bash
+Copy
+Edit
+python -m pip install -r install_packages_gpu.txt
+This will install all the dependencies required for the project.
 
-* Run `set_hand_histogram.py` to set the hand histogram for creating gestures. 
-* Once you get a good histogram, save it in the code folder, or you can use the histogram created by us that can be found [here](https://github.com/harshbg/Sign-Language-Interpreter-using-Deep-Learning/blob/master/Code/hist).
-* Added gestures and label them using OpenCV which uses webcam feed. by running `create_gestures.py` and stores them in a database. Alternately, you can use the gestures created by us [here](https://github.com/harshbg/Sign-Language-Interpreter-using-Deep-Learning/tree/master/Code).
-* Add different variations to the captured gestures by flipping all the images by using `Rotate_images.py`.
-* Run `load_images.py` to split all the captured gestures into training, validation and test set. 
-* To view all the gestures, run `display_gestures.py` .
-* Train the model using Keras by running `cnn_model_train.py`.
-* Run `final.py`. This will open up the gesture recognition window which will use your webcam to interpret the trained American Sign Language gestures.  
+How It Works
+Run set_hand_histogram.py to generate a hand histogram used for gesture segmentation.
 
-## Code Examples
+After obtaining a satisfactory histogram, save it in the code directory. Alternatively, you can use our pre-generated histogram available here.
 
-````
-# Model Traiining using CNN
+Create gesture datasets using your webcam by running create_gestures.py. This script captures hand signs and stores them with corresponding labels.
+
+Enhance dataset diversity by flipping images using Rotate_images.py.
+
+Run load_images.py to divide the dataset into training, validation, and testing sets.
+
+Use display_gestures.py to preview your collected gestures.
+
+Train the Convolutional Neural Network (CNN) model using cnn_model_train.py.
+
+Finally, launch final.py to start real-time sign recognition through your webcam.
+
+Code Example
+python
+Copy
+Edit
+# Model Training using CNN
 
 import numpy as np
 import pickle
@@ -96,8 +99,6 @@ def cnn_model():
 	filepath="cnn_model_keras2.h5"
 	checkpoint1 = ModelCheckpoint(filepath, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
 	callbacks_list = [checkpoint1]
-	#from keras.utils import plot_model
-	#plot_model(model, to_file='model.png', show_shapes=True)
 	return model, callbacks_list
 
 def train():
@@ -123,21 +124,22 @@ def train():
 	model.fit(train_images, train_labels, validation_data=(val_images, val_labels), epochs=15, batch_size=500, callbacks=callbacks_list)
 	scores = model.evaluate(val_images, val_labels, verbose=0)
 	print("CNN Error: %.2f%%" % (100-scores[1]*100))
-	#model.save('cnn_model_keras2.h5')
 
 train()
 K.clear_session();
+Features
+Recognizes 44 ASL gestures with over 95% accuracy.
 
-````
+Trained using a custom CNN model tailored for real-time recognition.
 
-## Features
-Our model was able to predict the 44 characters in the ASL with a prediction accuracy >95%.
+Works directly with live webcam feed for gesture interpretation.
 
-Features that can be added:
-* Deploy the project on cloud and create an API for using it.
-* Increase the vocabulary of our model
-* Incorporate feedback mechanism to make the model more robust
-* Add more sign languages
+Future Enhancements
+Deploy as a cloud-based API to support integration into third-party apps.
 
+Expand gesture vocabulary to cover full ASL and other sign languages.
 
+Implement a feedback loop to improve model performance with user input.
+
+Add multilingual or region-specific sign language support.
 
